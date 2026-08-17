@@ -260,31 +260,16 @@ h3 {
 
 .hero-visual {
   position: relative;
-  min-height: 510px;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
 }
 
-.app-icon {
-  position: absolute;
-  top: 2%;
-  right: 7%;
-  width: min(74%, 340px);
-  border-radius: 25%;
-  box-shadow: 0 34px 80px rgba(151, 45, 91, 0.25);
-  transform: rotate(2.5deg);
-}
-
-.queue-card {
-  position: absolute;
-  right: 0;
-  bottom: 2%;
-  width: min(92%, 400px);
-  padding: 1.15rem;
-  border: 1px solid rgba(255, 255, 255, 0.74);
-  border-radius: 26px;
-  background: rgba(255, 255, 255, 0.88);
+.product-shot {
+  width: min(100%, 410px);
+  border-radius: 38px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
-  transform: rotate(-2deg);
+  outline: 1px solid rgba(255, 255, 255, 0.72);
 }
 
 .queue-top {
@@ -814,17 +799,8 @@ details p {
     padding: 3.2rem 0 5rem;
   }
 
-  .hero-visual {
-    min-height: 430px;
-  }
-
-  .app-icon {
-    right: 6%;
-    width: 72%;
-  }
-
-  .queue-card {
-    width: 96%;
+  .product-shot {
+    width: min(100%, 360px);
   }
 
   .card-grid {
