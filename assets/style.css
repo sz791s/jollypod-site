@@ -267,9 +267,7 @@ h3 {
 
 .product-shot {
   width: min(100%, 410px);
-  border-radius: 38px;
-  box-shadow: var(--shadow);
-  outline: 1px solid rgba(255, 255, 255, 0.72);
+  filter: drop-shadow(0 24px 38px rgba(45, 29, 36, 0.2));
 }
 
 .queue-top {
