@@ -34,77 +34,101 @@
         <p class="lede">JollyPod is designed around one idea: listening should be simple, but your setup can be as specific as you want.</p>
       </section>
 
-      <section class="section-tight shell feature-list feature-showcase" aria-label="JollyPod features">
-        <article class="feature-row">
-          <span class="feature-index">01</span>
-          <figure class="feature-shot-frame">
-            <img class="feature-shot" src="/assets/feature-01.png" alt="JollyPod search screen with country selection and trending podcasts" width="442" height="960">
+      <section class="feature-gallery-section" aria-labelledby="gallery-title">
+        <div class="gallery-heading shell">
+          <div>
+            <span class="eyebrow">Current build</span>
+            <h2 id="gallery-title">See it in action.</h2>
+          </div>
+          <p>Swipe or scroll through the app. Choose a number to jump to a screen.</p>
+        </div>
+
+        <div class="feature-gallery" role="list" aria-label="JollyPod screenshots">
+          <figure class="gallery-card" id="shot-01" role="listitem">
+            <img src="/assets/feature-01.png" alt="JollyPod search screen with country selection and trending podcasts" width="442" height="960">
+            <figcaption><span>01</span> Find what you want</figcaption>
           </figure>
-          <div class="feature-copy">
-            <h2>Find what you want</h2>
+          <figure class="gallery-card" id="shot-02" role="listitem">
+            <img src="/assets/feature-02.png" alt="JollyPod inbox screen with podcast episodes and queue actions" width="442" height="960" loading="lazy">
+            <figcaption><span>02</span> Inbox first</figcaption>
+          </figure>
+          <figure class="gallery-card" id="shot-03" role="listitem">
+            <img src="/assets/feature-03.png" alt="JollyPod queue screen showing reordered podcast episodes" width="442" height="960" loading="lazy">
+            <figcaption><span>03</span> Your queue</figcaption>
+          </figure>
+          <figure class="gallery-card" id="shot-04" role="listitem">
+            <img src="/assets/feature-04.png" alt="JollyPod chapter screen with switches for skipping chapters" width="442" height="960" loading="lazy">
+            <figcaption><span>04</span> Skip chapters</figcaption>
+          </figure>
+          <figure class="gallery-card" id="shot-05" role="listitem">
+            <img src="/assets/feature-05.png" alt="JollyPod library screen with selected podcasts and per-podcast actions" width="442" height="960" loading="lazy">
+            <figcaption><span>05</span> Per-podcast rules</figcaption>
+          </figure>
+          <figure class="gallery-card" id="shot-06" role="listitem">
+            <img src="/assets/feature-06.png" alt="JollyPod player screen with playback controls and chapter progress" width="442" height="960" loading="lazy">
+            <figcaption><span>06</span> The player</figcaption>
+          </figure>
+          <figure class="gallery-card" id="shot-07" role="listitem">
+            <img src="/assets/feature-07.png" alt="JollyPod widget and app icon on the iPhone Home Screen" width="442" height="960" loading="lazy">
+            <figcaption><span>07</span> Widgets</figcaption>
+          </figure>
+        </div>
+
+        <nav class="gallery-nav shell" aria-label="Choose screenshot">
+          <a href="#shot-01" aria-label="Show screenshot 1">01</a>
+          <a href="#shot-02" aria-label="Show screenshot 2">02</a>
+          <a href="#shot-03" aria-label="Show screenshot 3">03</a>
+          <a href="#shot-04" aria-label="Show screenshot 4">04</a>
+          <a href="#shot-05" aria-label="Show screenshot 5">05</a>
+          <a href="#shot-06" aria-label="Show screenshot 6">06</a>
+          <a href="#shot-07" aria-label="Show screenshot 7">07</a>
+        </nav>
+      </section>
+
+      <section class="section-tight shell" aria-labelledby="feature-details-title">
+        <div class="feature-text-heading">
+          <span class="eyebrow">What it does</span>
+          <h2 id="feature-details-title">Control where it matters.</h2>
+          <p>JollyPod stays simple on the surface, with useful controls ready when you need them.</p>
+        </div>
+
+        <div class="feature-detail-grid">
+          <article class="feature-detail" id="feature-01">
+            <span class="feature-index">01 / DISCOVER</span>
+            <h3>Find what you want</h3>
             <p>Browse trending episodes and podcasts, switch countries, and add shows without fighting through a noisy discovery page.</p>
-          </div>
-        </article>
-        <article class="feature-row">
-          <span class="feature-index">02</span>
-          <figure class="feature-shot-frame">
-            <img class="feature-shot" src="/assets/feature-02.png" alt="JollyPod inbox screen with podcast episodes and queue actions" width="442" height="960">
-          </figure>
-          <div class="feature-copy">
-            <h2>Inbox first</h2>
+          </article>
+          <article class="feature-detail" id="feature-02">
+            <span class="feature-index">02 / INBOX</span>
+            <h3>Inbox first</h3>
             <p>New episodes land in an inbox instead of silently taking over. Swipe or open the menu to decide what deserves a place in the queue.</p>
-          </div>
-        </article>
-        <article class="feature-row">
-          <span class="feature-index">03</span>
-          <figure class="feature-shot-frame">
-            <img class="feature-shot" src="/assets/feature-03.png" alt="JollyPod queue screen showing reordered podcast episodes" width="442" height="960">
-          </figure>
-          <div class="feature-copy">
-            <h2>Queue in your order</h2>
+          </article>
+          <article class="feature-detail" id="feature-03">
+            <span class="feature-index">03 / QUEUE</span>
+            <h3>Queue in your order</h3>
             <p>Build the order yourself, drag episodes around, and know exactly what plays next. Your queue stays yours.</p>
-          </div>
-        </article>
-        <article class="feature-row">
-          <span class="feature-index">04</span>
-          <figure class="feature-shot-frame">
-            <img class="feature-shot" src="/assets/feature-04.png" alt="JollyPod chapter screen with switches for skipping chapters" width="442" height="960">
-          </figure>
-          <div class="feature-copy">
-            <h2>Skip chapters</h2>
+          </article>
+          <article class="feature-detail" id="feature-04">
+            <span class="feature-index">04 / CHAPTERS</span>
+            <h3>Skip chapters</h3>
             <p>Skip intros, ads, repeated segments, or anything else you do not want to hear. Configure it once and keep the useful parts.</p>
-          </div>
-        </article>
-        <article class="feature-row">
-          <span class="feature-index">05</span>
-          <figure class="feature-shot-frame">
-            <img class="feature-shot" src="/assets/feature-05.png" alt="JollyPod library screen with selected podcasts and per-podcast actions" width="442" height="960">
-          </figure>
-          <div class="feature-copy">
-            <h2>Podcast-specific rules</h2>
+          </article>
+          <article class="feature-detail" id="feature-05">
+            <span class="feature-index">05 / RULES</span>
+            <h3>Podcast-specific rules</h3>
             <p>Different shows deserve different behaviour. Queue next, queue last, pin to inbox, or use the default when a show does not need special treatment.</p>
-          </div>
-        </article>
-        <article class="feature-row">
-          <span class="feature-index">06</span>
-          <figure class="feature-shot-frame">
-            <img class="feature-shot" src="/assets/feature-06.png" alt="JollyPod player screen with playback controls and chapter progress" width="442" height="960">
-          </figure>
-          <div class="feature-copy">
-            <h2>Audio + video player</h2>
+          </article>
+          <article class="feature-detail" id="feature-06">
+            <span class="feature-index">06 / PLAYER</span>
+            <h3>Audio + video player</h3>
             <p>Listen to audio podcasts and watch video podcasts in the same focused player, with chapters, sleep timer, playback speed, and AirPlay nearby.</p>
-          </div>
-        </article>
-        <article class="feature-row">
-          <span class="feature-index">07</span>
-          <figure class="feature-shot-frame">
-            <img class="feature-shot" src="/assets/feature-07.png" alt="JollyPod widget and app icon on the iPhone Home Screen" width="442" height="960">
-          </figure>
-          <div class="feature-copy">
-            <h2>On your phone, wrist, and Mac</h2>
+          </article>
+          <article class="feature-detail" id="feature-07">
+            <span class="feature-index">07 / EVERYWHERE</span>
+            <h3>On your phone, wrist, and Mac</h3>
             <p>Use JollyPod on iPhone, Apple Watch, and Mac. Keep the important controls close with Watch widgets and system surfaces like Control Center.</p>
-          </div>
-        </article>
+          </article>
+        </div>
 
         <div class="feature-extra-grid" aria-label="More features">
           <article class="card">
