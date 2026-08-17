@@ -164,7 +164,7 @@ h3 {
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
-  align-items: center;
+  align-items: start;
   gap: clamp(2rem, 7vw, 6rem);
   min-height: 720px;
   padding: 5.5rem 0 7rem;
@@ -266,7 +266,8 @@ h3 {
 }
 
 .product-shot {
-  width: min(100%, 410px);
+  width: auto;
+  max-height: 400px;
   filter: drop-shadow(0 24px 38px rgba(45, 29, 36, 0.2));
 }
 
@@ -962,7 +963,8 @@ details p {
   }
 
   .product-shot {
-    width: min(100%, 360px);
+    width: auto;
+    max-height: 400px;
   }
 
   .card-grid {
