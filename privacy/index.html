@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="JollyPod privacy policy: what data is involved when you use the app, website, and support.">
+    <meta name="description" content="JollyPod privacy policy: local app data, iCloud sync, podcast providers, Apple services, Cloudflare hosting, and support.">
     <meta name="theme-color" content="#EC4890">
     <link rel="canonical" href="https://jollypod.app/privacy/">
     <link rel="icon" href="/assets/jollypod-icon-180.png">
@@ -26,79 +26,130 @@
 
     <main>
       <section class="page-hero shell">
-        <span class="eyebrow">The plain-English version</span>
-        <h1>Privacy should not need<br><span class="gradient-text">a detective.</span></h1>
-        <p class="lede">The JollyPod website uses no tracking and sets no cookies. The app needs to contact podcast publishers to fetch the shows and episodes you request.</p>
-        <span class="legal-meta">Last updated: 17 August 2026</span>
+        <span class="eyebrow">Privacy policy</span>
+        <h1>No ads. No profiles.<br><span class="gradient-text">No mystery analytics.</span></h1>
+        <p class="lede">JollyPod has no advertising or analytics backend. Simon Zryd does not receive your podcast library, queue, searches, listening history, playback progress, or imported audio unless you choose to include something in a support message. The app still connects to Apple and podcast providers for the features you request, as explained below.</p>
+        <span class="legal-meta">Last updated: 18 August 2026</span>
       </section>
 
       <section class="section-tight shell legal">
         <nav aria-label="Privacy policy sections">
           <ul class="legal-nav">
-            <li><a href="#who">Who is responsible</a></li>
-            <li><a href="#website">Website</a></li>
-            <li><a href="#app">App data</a></li>
-            <li><a href="#publishers">Podcast publishers</a></li>
-            <li><a href="#apple">Apple services</a></li>
+            <li><a href="#controller">Controller</a></li>
+            <li><a href="#no-collection">What JollyPod does not collect</a></li>
+            <li><a href="#device">Device and iCloud data</a></li>
+            <li><a href="#providers">Search and podcast providers</a></li>
+            <li><a href="#apple">Apple and subscriptions</a></li>
+            <li><a href="#website">Website and Cloudflare</a></li>
             <li><a href="#support">Support</a></li>
-            <li><a href="#retention">Retention</a></li>
+            <li><a href="#legal-bases">Legal bases</a></li>
+            <li><a href="#recipients">Recipients and transfers</a></li>
+            <li><a href="#retention">Retention and deletion</a></li>
             <li><a href="#rights">Your rights</a></li>
+            <li><a href="#children">Children and automated decisions</a></li>
             <li><a href="#changes">Changes</a></li>
           </ul>
         </nav>
 
         <div class="legal-content">
-          <section id="who">
-            <h2>1. Who is responsible</h2>
-            <p>JollyPod is provided by Simon Zryd in Switzerland. For privacy questions or requests, contact <a href="mailto:hello@jollypod.app">hello@jollypod.app</a>.</p>
+          <section id="controller">
+            <h2>1. Controller and contact</h2>
+            <p>JollyPod is provided by:</p>
+            <p><strong>Simon Zryd</strong><br><strong>[Full postal address required before publication]</strong><br>Switzerland<br><a href="mailto:hello@jollypod.app">hello@jollypod.app</a></p>
+            <p>Simon Zryd is responsible for the processing described in this policy where he determines why and how personal data is used. Apple, Cloudflare, podcast publishers, and media hosts may act as separate controllers for their own services.</p>
           </section>
 
-          <section id="website">
-            <h2>2. This website</h2>
-            <p>This website does not use analytics, advertising trackers, or cookies. Like most hosting providers, the infrastructure serving the site may temporarily process technical request information such as an IP address, timestamp, requested page, browser information, and security events. This is used to deliver and protect the site.</p>
+          <section id="no-collection">
+            <h2>2. What JollyPod does not collect</h2>
+            <p>JollyPod does not require a JollyPod account and has no developer-operated server that receives your podcast library, queue, listening history, playback progress, searches, settings, downloads, or imported audio.</p>
+            <p>JollyPod does not include advertising SDKs, behavioural analytics, cross-app tracking, fingerprinting, or profiling. Personal data is not sold or shared with data brokers or advertisers.</p>
           </section>
 
-          <section id="app">
-            <h2>3. Data used by the app</h2>
-            <p>JollyPod stores the information needed to provide podcast playback and your chosen setup. Depending on the features you use, this can include:</p>
+          <section id="device">
+            <h2>3. Data on your device and in iCloud</h2>
+            <p>The app processes the data needed to work, including:</p>
             <ul>
-              <li>podcast subscriptions and OPML files you import or export;</li>
-              <li>your inbox, queue, playback progress, and per-podcast settings;</li>
-              <li>downloaded episodes and MP3 files you choose to add; and</li>
-              <li>subscription entitlement information needed to unlock paid features.</li>
+              <li>followed podcasts, feed and episode metadata, and OPML imports or exports;</li>
+              <li>your inbox, queue, archive, listening history, playback progress, chapter choices, and app or per-podcast settings;</li>
+              <li>downloaded audio or video and MP3 files you choose to add; and</li>
+              <li>limited subscription entitlement information used to unlock paid features.</li>
             </ul>
-            <p>This information is used to operate the app. Data stored on your devices, in backups, or through system-level synchronisation is also subject to the Apple settings and services you choose.</p>
+            <p>This data is stored locally on your devices. iCloud sync is enabled by default and can be turned off in JollyPod’s settings. When enabled, Apple’s CloudKit synchronises app data through your private iCloud database, and imported audio can be stored in JollyPod’s iCloud Drive folder. Apple processes that data under your iCloud account and its own privacy terms. Simon Zryd does not operate a separate sync server and cannot browse your private JollyPod library.</p>
+            <p>JollyPod may use Apple Push Notification service for silent iCloud change notifications so your devices know when synced data has changed. These are technical sync notifications, not marketing messages. Device backups, widgets, Spotlight, Apple Watch connectivity, and other Apple system features are controlled by your device and Apple account settings.</p>
           </section>
 
-          <section id="publishers">
-            <h2>4. Podcast publishers and media hosts</h2>
-            <p>To find, update, stream, or download a podcast, JollyPod contacts the relevant podcast directory, RSS feed, publisher, or media host. Those third parties receive ordinary network information, including your IP address and details of the requested resource. Their own privacy policies apply. Podcast content and availability are controlled by the publishers, not JollyPod.</p>
+          <section id="providers">
+            <h2>4. Search, feeds, publishers, and media hosts</h2>
+            <p>Podcast search and charts use Apple’s podcast and iTunes directory services. A search can send the words you enter, the selected country or storefront, and in some cases a podcast feed address to Apple.</p>
+            <p>To follow, refresh, stream, download, or display a podcast, JollyPod connects directly to the relevant directory, RSS feed, artwork server, publisher, or media host. Those providers receive ordinary network information such as your IP address, timestamp, requested URL or resource, and technical request headers. Their own privacy policies and retention rules apply. Simon Zryd does not receive those requests unless you send their details to support.</p>
+            <p>Links in show notes or episode descriptions can open external websites. The operator of the opened site is responsible for its own data processing.</p>
           </section>
 
           <section id="apple">
             <h2>5. Apple services and subscriptions</h2>
-            <p>TestFlight distribution, App Store purchases, subscriptions, refunds, and related store services are provided by Apple. Apple processes payment and account data under its own terms and privacy policy. JollyPod does not receive your full payment-card details. It may receive a transaction or entitlement status so the app can recognise an active subscription.</p>
+            <p>Apple provides TestFlight, App Store distribution, StoreKit purchases, subscription management, refunds, iCloud, CloudKit, iCloud Drive, and Apple Push Notification service. Apple may process Apple Account, device, transaction, payment, storefront, and service-use data under <a href="https://www.apple.com/legal/privacy/">Apple’s Privacy Policy</a> and applicable Apple terms.</p>
+            <p>JollyPod does not receive your full payment-card details. The app receives limited StoreKit transaction and entitlement information, such as the product, status, and expiry date, so it can recognise an active subscription. Apple may also provide limited sales, territory, refund, and financial records needed for subscription support, fraud prevention, accounting, and legal obligations.</p>
+          </section>
+
+          <section id="website">
+            <h2>6. Website hosting and Cloudflare</h2>
+            <p>This is a static website hosted on Cloudflare Pages. JollyPod does not add analytics, advertising trackers, social-media trackers, or non-essential cookies. The site’s security policy also blocks third-party analytics scripts.</p>
+            <p>Cloudflare processes technical request and network data needed to deliver and protect the site. This can include an IP address, timestamp, requested page, referrer, browser or operating-system information, routing data, and security events. Cloudflare may use strictly necessary security cookies when a protection feature requires them. JollyPod does not use those cookies or request data for advertising, profiling, or audience analytics and does not maintain a separate visitor database.</p>
+            <p>Cloudflare’s processing and retention are described in the <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a>.</p>
           </section>
 
           <section id="support">
-            <h2>6. Support messages</h2>
-            <p>If you email support, the message, your email address, and any technical details you provide are used to answer you and investigate the issue. Please do not send passwords or information that is not needed for support.</p>
+            <h2>7. Support messages</h2>
+            <p>If you contact support, Simon Zryd receives your email address, message, and any logs, screenshots, device details, or other information you choose to include. This information is used only to answer you, investigate the issue, provide a requested gift code, and keep a limited record of important support or security matters.</p>
+            <p>Please do not send passwords, payment-card details, or information that is not needed for the request.</p>
+          </section>
+
+          <section id="legal-bases">
+            <h2>8. Purposes and legal bases</h2>
+            <p>Where the EU or UK GDPR applies, personal data is processed only for the following purposes and legal bases:</p>
+            <ul>
+              <li><strong>Providing the app and requested features:</strong> performance of a contract or steps requested before entering one;</li>
+              <li><strong>Support and subscription administration:</strong> performance of a contract and the legitimate interest in responding to users and operating JollyPod;</li>
+              <li><strong>Website delivery, reliability, and security:</strong> the legitimate interest in providing a secure and functional website; and</li>
+              <li><strong>Accounting, tax, fraud prevention, and legal requests:</strong> compliance with legal obligations and, where applicable, legitimate interests.</li>
+            </ul>
+            <p>Where consent is specifically requested, it can be withdrawn at any time without affecting earlier processing. No special-category personal data is intentionally requested.</p>
+          </section>
+
+          <section id="recipients">
+            <h2>9. Recipients and international transfers</h2>
+            <p>Depending on the feature you use, data can be processed by Apple and its service providers, Cloudflare, the podcast directories, publishers and media hosts you choose to contact, email providers involved in support, and public authorities where disclosure is legally required.</p>
+            <p>Some providers may process data outside Switzerland, the EEA, or your country. Where transfer rules apply, transfers rely on a recognised mechanism such as an adequacy decision or approved contractual clauses, as described in the relevant provider’s privacy information.</p>
           </section>
 
           <section id="retention">
-            <h2>7. Retention and security</h2>
-            <p>Support correspondence is kept only as long as reasonably needed to resolve requests, maintain a record of important technical issues, or meet legal obligations. App data remains under the controls provided by the app and your device. Reasonable technical and organisational safeguards are used, but no system can guarantee absolute security.</p>
+            <h2>10. Retention, deletion, and security</h2>
+            <ul>
+              <li><strong>Local app data</strong> remains until you remove it, use JollyPod’s reset controls, or delete the app. Device backups can retain data according to your Apple backup settings.</li>
+              <li><strong>iCloud data</strong> remains until you use JollyPod’s “Delete iCloud Data” control or remove it through the relevant Apple account controls. Turning sync off does not itself delete an existing iCloud copy.</li>
+              <li><strong>Downloads and imported files</strong> remain until you delete them. Imported audio stored in iCloud Drive can also be managed through Apple’s Files app.</li>
+              <li><strong>Subscription records</strong> are retained by Apple under its rules. JollyPod keeps only the limited local entitlement state needed to provide access.</li>
+              <li><strong>Routine support correspondence</strong> is normally deleted within 12 months after the request is resolved. Important security, dispute, accounting, or legal records may be kept longer where necessary.</li>
+              <li><strong>Hosting and third-party request logs</strong> follow the retention periods of Cloudflare, Apple, and the relevant podcast provider.</li>
+            </ul>
+            <p>JollyPod uses reasonable technical and organisational safeguards, including a restrictive website content-security policy and Apple’s platform security. No system can guarantee absolute security.</p>
           </section>
 
           <section id="rights">
-            <h2>8. Your rights</h2>
-            <p>Depending on where you live, you may have rights to access, correct, delete, restrict, or object to the processing of your personal data, and to receive certain data in a portable form. You may also have the right to complain to a data-protection authority. In Switzerland, the competent federal authority is the Federal Data Protection and Information Commissioner.</p>
-            <p>To make a request, email <a href="mailto:hello@jollypod.app">hello@jollypod.app</a>. Identity may need to be verified before a request can be completed.</p>
+            <h2>11. Your rights</h2>
+            <p>Depending on where you live, you may have rights to access, correct, delete, restrict, or object to processing; receive certain data in a portable form; and withdraw consent. You can delete or export much of the app data directly in JollyPod. To make a request about data Simon Zryd actually holds, email <a href="mailto:hello@jollypod.app">hello@jollypod.app</a>. Identity may need to be verified before a request is completed.</p>
+            <p>You may complain to the <a href="https://www.edoeb.admin.ch/en">Swiss Federal Data Protection and Information Commissioner</a>. If you are in the EEA or UK, you may also complain to the data-protection authority where you live, work, or believe an infringement occurred.</p>
+          </section>
+
+          <section id="children">
+            <h2>12. Children and automated decisions</h2>
+            <p>JollyPod is not directed at young children and does not knowingly ask them to provide personal data to Simon Zryd. A parent or guardian should contact <a href="mailto:hello@jollypod.app">hello@jollypod.app</a> if they believe a child sent personal data through support.</p>
+            <p>JollyPod does not use personal data for profiling or automated decisions that produce legal or similarly significant effects.</p>
           </section>
 
           <section id="changes">
-            <h2>9. Changes to this policy</h2>
-            <p>This policy may be updated when JollyPod changes or legal requirements develop. The date at the top shows the latest revision. Material changes will be communicated through an appropriate channel.</p>
+            <h2>13. Changes to this policy</h2>
+            <p>This policy may be updated when JollyPod, its providers, or legal requirements change. The date at the top shows the latest revision. Material changes will be communicated through the app, website, or another appropriate channel before they take effect where required.</p>
           </section>
         </div>
       </section>
@@ -106,7 +157,7 @@
 
     <footer class="site-footer">
       <div class="footer-grid shell">
-        <p class="footer-copy">© 2026 Simon Zryd. Made in Switzerland. This website uses no cookies or tracking.</p>
+        <p class="footer-copy">© 2026 Simon Zryd. Made in Switzerland. No advertising or analytics tracking by JollyPod.</p>
         <nav class="footer-links" aria-label="Footer navigation">
           <a href="/features/">Features</a><a href="/support/">Support</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://zryd.uk/">About</a><a href="mailto:hello@jollypod.app">Email</a>
         </nav>
