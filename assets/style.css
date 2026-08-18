@@ -566,19 +566,21 @@ h3 {
   color: var(--muted);
 }
 
+.feature-carousel {
+  --slide-width: clamp(270px, 34vw, 340px);
+}
+
 .feature-gallery-wrap {
   position: relative;
 }
 
 .feature-gallery {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(280px, 340px);
-  gap: clamp(1rem, 2vw, 1.5rem);
+  display: flex;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  padding: 1rem max(1rem, calc((100vw - var(--max)) / 2)) 1.25rem;
-  scroll-padding-inline: max(1rem, calc((100vw - var(--max)) / 2));
+  padding: 1rem calc((100% - var(--slide-width)) / 2) 1.15rem;
+  scroll-padding-inline: calc((100% - var(--slide-width)) / 2);
   scroll-snap-type: inline mandatory;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
@@ -590,11 +592,11 @@ h3 {
 
 .gallery-card {
   position: relative;
+  flex: 0 0 var(--slide-width);
   margin: 0;
   display: flex;
   flex-direction: column;
   padding: 0.7rem;
-  scroll-margin-inline: max(1rem, calc((100vw - var(--max)) / 2));
   scroll-snap-align: center;
   border: 1px solid rgba(255, 255, 255, 0.82);
   border-radius: 30px;
@@ -604,10 +606,10 @@ h3 {
 }
 
 .gallery-card img {
-  width: min(100%, calc(600px * 630 / 1368));
+  width: auto;
   height: auto;
+  max-width: 100%;
   max-height: 600px;
-  aspect-ratio: 630 / 1368;
   object-fit: contain;
   margin-inline: auto;
   border-radius: 26px;
@@ -618,7 +620,7 @@ h3 {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  min-height: 54px;
+  min-height: 66px;
   padding: 0.75rem 0.45rem 0.1rem;
   font-size: 0.94rem;
   font-weight: 800;
@@ -635,15 +637,75 @@ h3 {
   font-weight: 800;
 }
 
+.carousel-button {
+  position: absolute;
+  top: calc(50% - 1.7rem);
+  z-index: 5;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 14px 32px rgba(95, 47, 67, 0.14);
+  font: inherit;
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: transform 160ms ease, opacity 160ms ease, background 160ms ease;
+}
+
+.carousel-button:hover {
+  background: #fff;
+  transform: translateY(calc(-50% - 2px));
+}
+
+.carousel-button:disabled {
+  opacity: 0.32;
+  cursor: default;
+  transform: translateY(-50%);
+}
+
+.carousel-button-prev {
+  left: clamp(0.25rem, 2vw, 1rem);
+}
+
+.carousel-button-next {
+  right: clamp(0.25rem, 2vw, 1rem);
+}
+
+.gallery-progress {
+  width: min(320px, 52vw);
+  height: 4px;
+  margin: 0.65rem auto 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(32, 26, 34, 0.12);
+}
+
+.gallery-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--pink), var(--yellow));
+  transform: scaleX(0.125);
+  transform-origin: left center;
+  transition: transform 180ms ease;
+}
+
 .gallery-nav {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 0.9rem;
+  margin-top: 0.8rem;
 }
 
-.gallery-nav a {
+.gallery-nav button {
   display: inline-grid;
   width: 28px;
   height: 28px;
@@ -651,10 +713,10 @@ h3 {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  text-decoration: none;
+  cursor: pointer;
 }
 
-.gallery-nav a span {
+.gallery-nav button span {
   display: block;
   width: 7px;
   height: 7px;
@@ -663,14 +725,14 @@ h3 {
   transition: width 180ms ease, background 180ms ease;
 }
 
-.gallery-nav a:hover,
-.gallery-nav a:focus-visible {
+.gallery-nav button:hover,
+.gallery-nav button:focus-visible {
   outline-offset: 2px;
 }
 
-.gallery-nav a.is-active span,
-.gallery-nav a:hover span,
-.gallery-nav a:focus-visible span {
+.gallery-nav button.is-active span,
+.gallery-nav button:hover span,
+.gallery-nav button:focus-visible span {
   width: 22px;
   background: var(--pink);
 }
@@ -1009,11 +1071,14 @@ details p {
     padding-bottom: 4.5rem;
   }
 
+  .feature-carousel {
+    --slide-width: min(280px, 78vw);
+  }
+
   .feature-gallery {
-    grid-auto-columns: minmax(270px, 82vw);
     gap: 0.85rem;
-    padding-inline: max(1rem, calc((100vw - 82vw) / 2));
-    scroll-padding-inline: max(1rem, calc((100vw - 82vw) / 2));
+    padding-inline: calc((100% - var(--slide-width)) / 2);
+    scroll-padding-inline: calc((100% - var(--slide-width)) / 2);
   }
 
   .gallery-card {
@@ -1022,6 +1087,10 @@ details p {
 
   .gallery-card img {
     border-radius: 22px;
+  }
+
+  .carousel-button {
+    display: none;
   }
 
   .gallery-heading {
