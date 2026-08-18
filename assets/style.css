@@ -603,8 +603,11 @@ h3 {
 }
 
 .gallery-card img {
-  width: auto;
+  width: min(100%, calc(600px * 630 / 1368));
+  height: auto;
   max-height: 600px;
+  aspect-ratio: 630 / 1368;
+  object-fit: contain;
   margin-inline: auto;
   border-radius: 26px;
   background: #fff;
