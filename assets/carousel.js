@@ -6,7 +6,6 @@
   const track = carousel.querySelector("#feature-gallery");
   const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
   const dots = [...carousel.querySelectorAll("[data-carousel-dot]")];
-  const progress = carousel.querySelector("[data-carousel-progress]");
   const previous = carousel.querySelector("[data-carousel-prev]");
   const next = carousel.querySelector("[data-carousel-next]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -42,10 +41,6 @@
         dot.removeAttribute("aria-current");
       }
     });
-
-    if (progress) {
-      progress.style.transform = `scaleX(${(activeIndex + 1) / slides.length})`;
-    }
 
     if (previous) previous.disabled = activeIndex === 0;
     if (next) next.disabled = activeIndex === slides.length - 1;
