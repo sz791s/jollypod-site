@@ -18,6 +18,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -167,7 +168,7 @@ h3 {
   align-items: start;
   gap: clamp(2rem, 7vw, 6rem);
   min-height: 720px;
-  padding: 5.5rem 0 7rem;
+  padding: clamp(4.5rem, 10vw, 7rem) 0 7rem;
 }
 
 .eyebrow {
@@ -911,7 +912,7 @@ details p {
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding-top: 4rem;
+    padding-top: clamp(4.5rem, 10vw, 7rem);
   }
 
   .hero-visual {
@@ -984,7 +985,7 @@ details p {
   }
 
   .hero {
-    padding: 3.2rem 0 5rem;
+    padding: 4.5rem 0 5rem;
   }
 
   .product-shot {
