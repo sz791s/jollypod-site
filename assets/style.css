@@ -568,7 +568,7 @@ h3 {
 .feature-gallery {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(230px, 292px);
+  grid-auto-columns: minmax(230px, 316px);
   gap: clamp(0.9rem, 2vw, 1.25rem);
   overflow-x: auto;
   overscroll-behavior-inline: contain;
@@ -607,7 +607,9 @@ h3 {
 }
 
 .gallery-card img {
-  width: 100%;
+  width: auto;
+  max-height: 600px;
+  margin-inline: auto;
   border-radius: 26px;
   background: #fff;
 }
@@ -984,7 +986,7 @@ details p {
   }
 
   .feature-gallery {
-    grid-auto-columns: minmax(220px, 78vw);
+    grid-auto-columns: minmax(220px, 82vw);
   }
 
   .gallery-card {
