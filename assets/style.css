@@ -378,7 +378,6 @@ h3 {
 }
 
 .section-tight {
-  padding: 4.5rem 0;
 }
 
 .section-heading {
@@ -501,7 +500,7 @@ h3 {
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 2rem;
-  padding: clamp(2rem, 6vw, 4rem);
+  padding: clamp(2rem, 6vw, 4.5rem);
   border-radius: 34px;
   color: #fff;
   background:
@@ -872,7 +871,8 @@ details p {
   align-items: center;
   gap: 2rem;
   margin-bottom: 5rem;
-  padding: clamp(2rem, 6vw, 4rem);
+  margin-top: 5rem;
+  padding: clamp(2rem, 6vw, 4.5rem);
   border: 1px solid rgba(236, 72, 144, 0.18);
   border-radius: 30px;
   background: linear-gradient(135deg, rgba(236, 72, 144, 0.12), rgba(251, 191, 20, 0.16));
