@@ -501,7 +501,7 @@ h3 {
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 2rem;
-  padding: clamp(2rem, 6vw, 4.5rem);
+  padding: clamp(2rem, 6vw, 4rem);
   border-radius: 34px;
   color: #fff;
   background:
