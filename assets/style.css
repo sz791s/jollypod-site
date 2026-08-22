@@ -56,6 +56,68 @@ button:focus-visible {
   outline-offset: 4px;
 }
 
+.shared-link-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding-block: 3rem;
+}
+
+.shared-link-card {
+  width: min(100%, 720px);
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow);
+}
+
+.shared-link-card h1 {
+  margin-bottom: 0.75rem;
+  font-size: clamp(2.4rem, 8vw, 4.6rem);
+}
+
+.shared-link-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.shared-link-brand img {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+}
+
+.shared-link-subtitle {
+  color: var(--muted);
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+}
+
+.shared-link-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.25rem;
+  margin-block: 1.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.shared-link-actions {
+  margin-top: 2rem;
+}
+
+.shared-link-safety {
+  margin: 2rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 h1,
 h2,
 h3,

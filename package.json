@@ -1,0 +1,25 @@
+{
+  "name": "jollypod-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "pnpm run types && pnpm run typecheck && pnpm run test && pnpm run deploy:dry-run",
+    "deploy": "wrangler deploy",
+    "deploy:dry-run": "wrangler deploy --dry-run",
+    "dev": "wrangler dev",
+    "migrate:local": "wrangler d1 migrations apply jollypod-share --local",
+    "migrate:remote": "wrangler d1 migrations apply jollypod-share --remote",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "types": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.0.0",
+    "@types/node": "26.2.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.11",
+    "wrangler": "4.125.0"
+  },
+  "packageManager": "pnpm@11.19.0"
+}

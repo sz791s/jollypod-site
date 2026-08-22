@@ -1,0 +1,21 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "N886FR56SY.com.simonzryd.jollypod-app"
+        ],
+        "components": [
+          {
+            "/": "/e/*",
+            "comment": "JollyPod episode share links"
+          },
+          {
+            "/": "/p/*",
+            "comment": "JollyPod podcast share links"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "jollypod-site",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-08-22",
+	"routes": [
+		{
+			"pattern": "jollypod.app/*",
+			"zone_name": "jollypod.app"
+		}
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".",
+		"not_found_handling": "404-page",
+		"run_worker_first": [
+			"/api/shares",
+			"/e/*",
+			"/p/*"
+		]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "jollypod-share",
+			"database_id": "5c6aaf82-912b-4e2d-8833-398ca35cd7c7",
+			"migrations_dir": "migrations"
+		}
+	],
+	"ratelimits": [
+		{
+			"name": "SHARE_CREATE_RATE_LIMITER",
+			"namespace_id": "3864421",
+			"simple": {
+				"limit": 60,
+				"period": 60
+			}
+		}
+	],
+	"observability": {
+		"enabled": true,
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1
+		},
+		"traces": {
+			"enabled": true,
+			"head_sampling_rate": 0.05
+		}
+	}
+}

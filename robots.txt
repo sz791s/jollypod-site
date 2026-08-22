@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /e/
+Disallow: /p/
 
 Sitemap: https://jollypod.app/sitemap.xml
