@@ -81,7 +81,7 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
   font-size: 1.15rem;
   font-weight: 800;
   text-decoration: none;
@@ -96,6 +96,12 @@ button:focus-visible {
 .shared-link-subtitle {
   color: var(--muted);
   font-size: clamp(1.1rem, 3vw, 1.35rem);
+}
+
+.shared-link-eyebrow {
+  display: flex;
+  width: fit-content;
+  margin: 0 0 0.85rem;
 }
 
 .shared-link-metadata {

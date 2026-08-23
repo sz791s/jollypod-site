@@ -201,6 +201,34 @@ describe("share resolution", () => {
     expect(html).toContain(`<link rel="canonical" href="${created.url}?t=75">`);
   });
 
+  it("localizes shared pages and keeps the label directly above the title", async () => {
+    const created = await json<CreateResponse>(
+      await createShare(basePodcast, "198.51.100.24"),
+    );
+
+    const response = await workerFetch(`/p/${created.id}`, {
+      headers: {
+        Accept: "text/html",
+        "Accept-Language": "de-CH,de;q=0.9,en;q=0.5",
+      },
+    });
+    const html = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("vary")).toBe("Accept, Accept-Language");
+    expect(html).toContain('<html lang="de">');
+    expect(html).toContain('<p class="eyebrow shared-link-eyebrow">Geteilter Podcast</p>');
+    expect(html).toContain(">In JollyPod öffnen<");
+    expect(html).toContain("Dieser Link zeigt den Inhalt nur an.");
+
+    const brandIndex = html.indexOf("shared-link-brand");
+    const eyebrowIndex = html.indexOf("shared-link-eyebrow");
+    const titleIndex = html.indexOf("<h1>Example Podcast</h1>");
+    expect(brandIndex).toBeGreaterThan(-1);
+    expect(eyebrowIndex).toBeGreaterThan(brandIndex);
+    expect(titleIndex).toBeGreaterThan(eyebrowIndex);
+  });
+
   it("does not change D1 records while resolving or handling missing links", async () => {
     const created = await json<CreateResponse>(
       await createShare(basePodcast, "198.51.100.22"),

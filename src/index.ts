@@ -6,6 +6,7 @@ const PUBLIC_ROUTE_PATTERN = /^\/(e|p)\/([A-Za-z0-9_-]{8,32})$/u;
 const TESTFLIGHT_URL = "https://testflight.apple.com/join/Uh3skMhD";
 
 type ShareKind = "episode" | "podcast";
+type LocaleCode = "en" | "de" | "es" | "fr" | "it" | "ja" | "pt-BR" | "zh-Hans";
 
 interface ShareInput {
   version: 1;
@@ -59,6 +60,23 @@ interface PublicRoute {
   startTimeSeconds: number | null;
 }
 
+interface SharePageCopy {
+  htmlLang: string;
+  sharedEpisode: string;
+  sharedPodcast: string;
+  openInJollyPod: string;
+  getJollyPod: string;
+  originalWebsite: string;
+  safety: string;
+  publishedPrefix: string;
+  sharedFromPrefix: string;
+  linkUnavailableTitle: string;
+  linkUnavailableEyebrow: string;
+  nothingToOpen: string;
+  notFoundMessage: string;
+  visitJollyPod: string;
+}
+
 class RequestError extends Error {
   constructor(
     readonly status: number,
@@ -101,6 +119,139 @@ const INSERT_SHARE = `
     duration_seconds
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
+
+const DEFAULT_LOCALE: LocaleCode = "en";
+const SUPPORTED_LOCALES: LocaleCode[] = ["en", "de", "es", "fr", "it", "ja", "pt-BR", "zh-Hans"];
+const COPY: Record<LocaleCode, SharePageCopy> = {
+  en: {
+    htmlLang: "en",
+    sharedEpisode: "Shared episode",
+    sharedPodcast: "Shared podcast",
+    openInJollyPod: "Open in JollyPod",
+    getJollyPod: "Get JollyPod",
+    originalWebsite: "Original website",
+    safety: "Opening this link only shows the item. It never starts playback, subscribes, or changes your queue or library.",
+    publishedPrefix: "Published",
+    sharedFromPrefix: "Shared from",
+    linkUnavailableTitle: "Link unavailable",
+    linkUnavailableEyebrow: "Link unavailable",
+    nothingToOpen: "Nothing to open here.",
+    notFoundMessage: "This shared episode or podcast could not be found.",
+    visitJollyPod: "Visit JollyPod",
+  },
+  de: {
+    htmlLang: "de",
+    sharedEpisode: "Geteilte Episode",
+    sharedPodcast: "Geteilter Podcast",
+    openInJollyPod: "In JollyPod öffnen",
+    getJollyPod: "JollyPod laden",
+    originalWebsite: "Original-Website",
+    safety: "Dieser Link zeigt den Inhalt nur an. Er startet nie die Wiedergabe, abonniert nichts und ändert weder Queue noch Mediathek.",
+    publishedPrefix: "Veröffentlicht",
+    sharedFromPrefix: "Geteilt ab",
+    linkUnavailableTitle: "Link nicht verfügbar",
+    linkUnavailableEyebrow: "Link nicht verfügbar",
+    nothingToOpen: "Hier gibt es nichts zu öffnen.",
+    notFoundMessage: "Diese geteilte Episode oder dieser Podcast konnte nicht gefunden werden.",
+    visitJollyPod: "JollyPod besuchen",
+  },
+  es: {
+    htmlLang: "es",
+    sharedEpisode: "Episodio compartido",
+    sharedPodcast: "Podcast compartido",
+    openInJollyPod: "Abrir en JollyPod",
+    getJollyPod: "Obtener JollyPod",
+    originalWebsite: "Sitio web original",
+    safety: "Abrir este enlace solo muestra el elemento. Nunca inicia la reproducción, no suscribe ni cambia tu cola o biblioteca.",
+    publishedPrefix: "Publicado",
+    sharedFromPrefix: "Compartido desde",
+    linkUnavailableTitle: "Enlace no disponible",
+    linkUnavailableEyebrow: "Enlace no disponible",
+    nothingToOpen: "No hay nada que abrir aquí.",
+    notFoundMessage: "No se pudo encontrar este episodio o podcast compartido.",
+    visitJollyPod: "Visitar JollyPod",
+  },
+  fr: {
+    htmlLang: "fr",
+    sharedEpisode: "Épisode partagé",
+    sharedPodcast: "Podcast partagé",
+    openInJollyPod: "Ouvrir dans JollyPod",
+    getJollyPod: "Obtenir JollyPod",
+    originalWebsite: "Site web d’origine",
+    safety: "Ouvrir ce lien affiche seulement l’élément. Il ne lance jamais la lecture, n’abonne pas et ne modifie pas votre file ou bibliothèque.",
+    publishedPrefix: "Publié le",
+    sharedFromPrefix: "Partagé depuis",
+    linkUnavailableTitle: "Lien indisponible",
+    linkUnavailableEyebrow: "Lien indisponible",
+    nothingToOpen: "Rien à ouvrir ici.",
+    notFoundMessage: "Cet épisode ou podcast partagé est introuvable.",
+    visitJollyPod: "Visiter JollyPod",
+  },
+  it: {
+    htmlLang: "it",
+    sharedEpisode: "Episodio condiviso",
+    sharedPodcast: "Podcast condiviso",
+    openInJollyPod: "Apri in JollyPod",
+    getJollyPod: "Scarica JollyPod",
+    originalWebsite: "Sito web originale",
+    safety: "L’apertura di questo link mostra solo l’elemento. Non avvia mai la riproduzione, non iscrive e non modifica la coda o la libreria.",
+    publishedPrefix: "Pubblicato",
+    sharedFromPrefix: "Condiviso da",
+    linkUnavailableTitle: "Link non disponibile",
+    linkUnavailableEyebrow: "Link non disponibile",
+    nothingToOpen: "Qui non c’è nulla da aprire.",
+    notFoundMessage: "Questo episodio o podcast condiviso non è stato trovato.",
+    visitJollyPod: "Visita JollyPod",
+  },
+  ja: {
+    htmlLang: "ja",
+    sharedEpisode: "共有されたエピソード",
+    sharedPodcast: "共有されたポッドキャスト",
+    openInJollyPod: "JollyPodで開く",
+    getJollyPod: "JollyPodを入手",
+    originalWebsite: "元のウェブサイト",
+    safety: "このリンクを開いても項目を表示するだけです。再生、購読、キューやライブラリの変更は行いません。",
+    publishedPrefix: "公開日",
+    sharedFromPrefix: "共有位置",
+    linkUnavailableTitle: "リンクを利用できません",
+    linkUnavailableEyebrow: "リンクを利用できません",
+    nothingToOpen: "ここで開けるものはありません。",
+    notFoundMessage: "共有されたエピソードまたはポッドキャストが見つかりませんでした。",
+    visitJollyPod: "JollyPodを見る",
+  },
+  "pt-BR": {
+    htmlLang: "pt-BR",
+    sharedEpisode: "Episódio compartilhado",
+    sharedPodcast: "Podcast compartilhado",
+    openInJollyPod: "Abrir no JollyPod",
+    getJollyPod: "Obter JollyPod",
+    originalWebsite: "Site original",
+    safety: "Abrir este link apenas mostra o item. Ele nunca inicia a reprodução, assina ou altera sua fila ou biblioteca.",
+    publishedPrefix: "Publicado em",
+    sharedFromPrefix: "Compartilhado a partir de",
+    linkUnavailableTitle: "Link indisponível",
+    linkUnavailableEyebrow: "Link indisponível",
+    nothingToOpen: "Não há nada para abrir aqui.",
+    notFoundMessage: "Este episódio ou podcast compartilhado não foi encontrado.",
+    visitJollyPod: "Visitar JollyPod",
+  },
+  "zh-Hans": {
+    htmlLang: "zh-Hans",
+    sharedEpisode: "分享的单集",
+    sharedPodcast: "分享的播客",
+    openInJollyPod: "在 JollyPod 中打开",
+    getJollyPod: "获取 JollyPod",
+    originalWebsite: "原始网站",
+    safety: "打开此链接只会显示该项目。它绝不会自动播放、订阅，也不会更改你的队列或资料库。",
+    publishedPrefix: "发布于",
+    sharedFromPrefix: "分享自",
+    linkUnavailableTitle: "链接不可用",
+    linkUnavailableEyebrow: "链接不可用",
+    nothingToOpen: "这里没有可打开的内容。",
+    notFoundMessage: "找不到这个分享的单集或播客。",
+    visitJollyPod: "访问 JollyPod",
+  },
+};
 
 export default {
   async fetch(request, env): Promise<Response> {
@@ -231,12 +382,12 @@ async function handleResolve(request: Request, url: URL, env: Env): Promise<Resp
     });
   }
 
-  return dynamicResponse(request, renderSharePage(record, route), {
+  return dynamicResponse(request, renderSharePage(record, route, request.headers.get("accept-language")), {
     status: 200,
     headers: {
       "Cache-Control": "public, max-age=300, s-maxage=86400, immutable",
       "Content-Type": "text/html; charset=utf-8",
-      Vary: "Accept",
+      Vary: "Accept, Accept-Language",
     },
   });
 }
@@ -658,12 +809,12 @@ function notFoundResponse(request: Request): Response {
   if (wantsJSON(request)) {
     return errorResponse(request, 404, "not_found", "This shared JollyPod link was not found.");
   }
-  return dynamicResponse(request, renderNotFoundPage(), {
+  return dynamicResponse(request, renderNotFoundPage(request.headers.get("accept-language")), {
     status: 404,
     headers: {
       "Cache-Control": "public, max-age=30, s-maxage=60",
       "Content-Type": "text/html; charset=utf-8",
-      Vary: "Accept",
+      Vary: "Accept, Accept-Language",
     },
   });
 }
@@ -675,12 +826,12 @@ function errorResponse(
   message: string,
 ): Response {
   if (!wantsJSON(request) && request.method !== "POST") {
-    return dynamicResponse(request, renderErrorPage(message), {
+    return dynamicResponse(request, renderErrorPage(message, request.headers.get("accept-language")), {
       status,
       headers: {
         "Cache-Control": "no-store",
         "Content-Type": "text/html; charset=utf-8",
-        Vary: "Accept",
+        Vary: "Accept, Accept-Language",
       },
     });
   }
@@ -705,9 +856,48 @@ function dynamicResponse(request: Request, body: BodyInit | null, init: Response
   return new Response(request.method === "HEAD" ? null : body, { ...init, headers });
 }
 
-function renderSharePage(record: ShareRecord, route: PublicRoute): string {
+function resolveLocale(localeHeader?: string | null): LocaleCode {
+  if (localeHeader === null || localeHeader === undefined) {
+    return DEFAULT_LOCALE;
+  }
+
+  const requested = localeHeader
+    .split(",")
+    .map((part) => {
+      const [tagPart, ...parameters] = part.trim().split(";");
+      const quality = parameters
+        .map((parameter) => parameter.trim())
+        .find((parameter) => parameter.startsWith("q="));
+      const parsedQuality = quality === undefined ? 1 : Number(quality.slice(2));
+      return {
+        tag: tagPart?.trim().toLowerCase() ?? "",
+        quality: Number.isFinite(parsedQuality) ? parsedQuality : 0,
+      };
+    })
+    .filter((item) => item.tag.length > 0 && item.quality > 0)
+    .sort((left, right) => right.quality - left.quality);
+
+  for (const item of requested) {
+    const exact = SUPPORTED_LOCALES.find((locale) => locale.toLowerCase() === item.tag);
+    if (exact !== undefined) {
+      return exact;
+    }
+
+    const primary = item.tag.split("-", 1)[0];
+    const languageMatch = SUPPORTED_LOCALES.find((locale) => locale.toLowerCase().split("-", 1)[0] === primary);
+    if (languageMatch !== undefined) {
+      return languageMatch;
+    }
+  }
+
+  return DEFAULT_LOCALE;
+}
+
+function renderSharePage(record: ShareRecord, route: PublicRoute, localeHeader?: string | null): string {
+  const locale = resolveLocale(localeHeader);
+  const copy = COPY[locale];
   const isEpisode = record.kind === "episode";
-  const title = isEpisode ? record.episodeTitle ?? "Shared Episode" : record.podcastTitle;
+  const title = isEpisode ? record.episodeTitle ?? copy.sharedEpisode : record.podcastTitle;
   const subtitle = isEpisode ? record.podcastTitle : record.podcastAuthor;
   const description = isEpisode
     ? `${title} — ${record.podcastTitle}`
@@ -722,10 +912,10 @@ function renderSharePage(record: ShareRecord, route: PublicRoute): string {
     ? ""
     : `?t=${route.startTimeSeconds}`;
   const canonicalURL = `${CANONICAL_ORIGIN}/${canonicalPath}/${record.id}${positionQuery}`;
-  const metadata = renderMetadata(record, route);
+  const metadata = renderMetadata(record, route, locale, copy);
 
   return `<!doctype html>
-<html lang="en">
+<html lang="${copy.htmlLang}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -739,7 +929,7 @@ function renderSharePage(record: ShareRecord, route: PublicRoute): string {
     <link rel="canonical" href="${canonicalURL}">
     <link rel="icon" href="/assets/jollypod-icon-180.png">
     <link rel="apple-touch-icon" href="/assets/jollypod-icon-180.png">
-    <link rel="stylesheet" href="/assets/style.css?v=20260822-1">
+    <link rel="stylesheet" href="/assets/style.css?v=20260823-1">
     <title>${escapeHTML(title)} — JollyPod</title>
   </head>
   <body>
@@ -749,27 +939,32 @@ function renderSharePage(record: ShareRecord, route: PublicRoute): string {
           <img src="/assets/jollypod-icon-180.png" alt="" width="52" height="52">
           <span>JollyPod</span>
         </a>
-        <p class="eyebrow">Shared ${isEpisode ? "episode" : "podcast"}</p>
+        <p class="eyebrow shared-link-eyebrow">${isEpisode ? copy.sharedEpisode : copy.sharedPodcast}</p>
         <h1>${escapeHTML(title)}</h1>
         ${subtitle === null ? "" : `<p class="shared-link-subtitle">${escapeHTML(subtitle)}</p>`}
         ${metadata}
         <div class="actions shared-link-actions">
-          <a class="button button-primary" href="${canonicalURL}">Open in JollyPod</a>
-          <a class="button button-secondary" href="${TESTFLIGHT_URL}">Get JollyPod</a>
-          ${originalURL === null ? "" : `<a class="button button-secondary" href="${escapeHTML(originalURL)}" rel="noreferrer noopener">Original website</a>`}
+          <a class="button button-primary" href="${canonicalURL}">${copy.openInJollyPod}</a>
+          <a class="button button-secondary" href="${TESTFLIGHT_URL}">${copy.getJollyPod}</a>
+          ${originalURL === null ? "" : `<a class="button button-secondary" href="${escapeHTML(originalURL)}" rel="noreferrer noopener">${copy.originalWebsite}</a>`}
         </div>
-        <p class="shared-link-safety">Opening this link only shows the item. It never starts playback, subscribes, or changes your queue or library.</p>
+        <p class="shared-link-safety">${copy.safety}</p>
       </article>
     </main>
   </body>
 </html>`;
 }
 
-function renderMetadata(record: ShareRecord, route: PublicRoute): string {
+function renderMetadata(
+  record: ShareRecord,
+  route: PublicRoute,
+  locale: LocaleCode,
+  copy: SharePageCopy,
+): string {
   const items: string[] = [];
   if (record.publishedAt !== null) {
     const date = new Date(record.publishedAt * 1000);
-    items.push(`<span>Published ${escapeHTML(new Intl.DateTimeFormat("en", {
+    items.push(`<span>${copy.publishedPrefix} ${escapeHTML(new Intl.DateTimeFormat(locale, {
       dateStyle: "long",
       timeZone: "UTC",
     }).format(date))}</span>`);
@@ -778,7 +973,7 @@ function renderMetadata(record: ShareRecord, route: PublicRoute): string {
     items.push(`<span>${formatDuration(record.durationSeconds)}</span>`);
   }
   if (route.startTimeSeconds !== null) {
-    items.push(`<span>Shared from ${formatDuration(route.startTimeSeconds)}</span>`);
+    items.push(`<span>${copy.sharedFromPrefix} ${formatDuration(route.startTimeSeconds)}</span>`);
   }
   return items.length === 0
     ? ""
@@ -794,21 +989,23 @@ function formatDuration(totalSeconds: number): string {
     : `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
-function renderNotFoundPage(): string {
-  return renderErrorPage("This shared episode or podcast could not be found.");
+function renderNotFoundPage(localeHeader?: string | null): string {
+  const locale = resolveLocale(localeHeader);
+  return renderErrorPage(COPY[locale].notFoundMessage, localeHeader);
 }
 
-function renderErrorPage(message: string): string {
+function renderErrorPage(message: string, localeHeader?: string | null): string {
+  const copy = COPY[resolveLocale(localeHeader)];
   return `<!doctype html>
-<html lang="en">
+<html lang="${copy.htmlLang}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <meta name="theme-color" content="#EC4890">
     <link rel="icon" href="/assets/jollypod-icon-180.png">
-    <link rel="stylesheet" href="/assets/style.css?v=20260822-1">
-    <title>Link unavailable — JollyPod</title>
+    <link rel="stylesheet" href="/assets/style.css?v=20260823-1">
+    <title>${copy.linkUnavailableTitle} — JollyPod</title>
   </head>
   <body>
     <main class="shared-link-page shell">
@@ -817,11 +1014,11 @@ function renderErrorPage(message: string): string {
           <img src="/assets/jollypod-icon-180.png" alt="" width="52" height="52">
           <span>JollyPod</span>
         </a>
-        <p class="eyebrow">Link unavailable</p>
-        <h1>Nothing to open here.</h1>
+        <p class="eyebrow shared-link-eyebrow">${copy.linkUnavailableEyebrow}</p>
+        <h1>${copy.nothingToOpen}</h1>
         <p class="shared-link-subtitle">${escapeHTML(message)}</p>
         <div class="actions shared-link-actions">
-          <a class="button button-primary" href="/">Visit JollyPod</a>
+          <a class="button button-primary" href="/">${copy.visitJollyPod}</a>
         </div>
       </article>
     </main>
