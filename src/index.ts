@@ -929,7 +929,7 @@ function renderSharePage(record: ShareRecord, route: PublicRoute, localeHeader?:
     <link rel="canonical" href="${canonicalURL}">
     <link rel="icon" href="/assets/jollypod-icon-180.png">
     <link rel="apple-touch-icon" href="/assets/jollypod-icon-180.png">
-    <link rel="stylesheet" href="/assets/style.css?v=20260823-1">
+    <link rel="stylesheet" href="/assets/style.css?v=20260823-2">
     <title>${escapeHTML(title)} — JollyPod</title>
   </head>
   <body>
@@ -1004,7 +1004,7 @@ function renderErrorPage(message: string, localeHeader?: string | null): string 
     <meta name="robots" content="noindex">
     <meta name="theme-color" content="#EC4890">
     <link rel="icon" href="/assets/jollypod-icon-180.png">
-    <link rel="stylesheet" href="/assets/style.css?v=20260823-1">
+    <link rel="stylesheet" href="/assets/style.css?v=20260823-2">
     <title>${copy.linkUnavailableTitle} — JollyPod</title>
   </head>
   <body>
