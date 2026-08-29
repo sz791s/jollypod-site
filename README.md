@@ -57,6 +57,9 @@ expiration field and gives existing links 30 days from their original creation.
 
 `wrangler.jsonc` pins the production D1 `database_id`. Keep it matched to the
 `jollypod-share` database returned by Wrangler when the database is created.
+The root `.assetsignore` is an allowlist: only the public HTML, metadata, and
+`assets/` files are uploaded. Source, tests, migrations, and local caches stay
+private even though the static asset directory is the repository root.
 
 The existing Pages project can remain as an emergency static fallback, but the `jollypod.app/*` Worker route serves production traffic after deployment. Do not bind a second Worker to the same route.
 
