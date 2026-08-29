@@ -16,6 +16,8 @@ The public website stays plain HTML and CSS with no framework, remote fonts, coo
 ## Share-service boundaries
 
 - D1 stores only the immutable identity and display metadata needed for a share link.
+- A link expires 30 days after its most recent creation request. Expired rows are
+  unavailable immediately and are physically deleted by a daily UTC cleanup.
 - Episode identity uses feed URL plus GUID, or feed URL plus enclosure URL when no GUID exists.
 - The Worker never downloads a feed, webpage, or media URL supplied by a client.
 - Opening a public link only reads metadata. It cannot play, subscribe, queue, archive, or change a library.
@@ -49,7 +51,12 @@ pnpm run check
 5. Deploy with `pnpm run deploy`.
 6. Verify the AASA file and one episode and podcast link before releasing the app entitlement.
 
-`wrangler.jsonc` intentionally omits a D1 `database_id`; current Wrangler resolves the named database. If the account requires an explicit ID, copy the ID returned in step 2 into the D1 binding.
+For an existing deployment, apply pending D1 migrations before deploying Worker
+code that depends on them. Migration `0002_expire_share_links.sql` adds the
+expiration field and gives existing links 30 days from their original creation.
+
+`wrangler.jsonc` pins the production D1 `database_id`. Keep it matched to the
+`jollypod-share` database returned by Wrangler when the database is created.
 
 The existing Pages project can remain as an emergency static fallback, but the `jollypod.app/*` Worker route serves production traffic after deployment. Do not bind a second Worker to the same route.
 

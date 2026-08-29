@@ -1,11 +1,19 @@
 import { env, exports } from "cloudflare:workers";
+import {
+  createExecutionContext,
+  createScheduledController,
+  waitOnExecutionContext,
+} from "cloudflare:test";
 import { describe, expect, it } from "vitest";
+
+import worker from "../src/index";
 
 interface CreateResponse {
   version: number;
   id: string;
   kind: "episode" | "podcast";
   url: string;
+  expiresAt: number;
 }
 
 interface SharedRecord {
@@ -62,6 +70,7 @@ describe("share creation", () => {
     expect(firstBody.id).toMatch(/^[A-Za-z0-9_-]{12}$/u);
     expect(secondBody.id).toBe(firstBody.id);
     expect(firstBody.url).toBe(`https://jollypod.app/e/${firstBody.id}`);
+    expect(firstBody.expiresAt).toBeGreaterThan(Math.floor(Date.now() / 1000));
 
     const stored = await resolveJSON(firstBody.url);
     expect(stored.episodeTitle).toBe("Example Episode");
@@ -95,6 +104,52 @@ describe("share creation", () => {
     expect(second.status).toBe(200);
     expect(secondBody.id).toBe(firstBody.id);
     expect(firstBody.url).toBe(`https://jollypod.app/p/${firstBody.id}`);
+  });
+
+  it("renews an active link and replaces it after expiration", async () => {
+    const first = await json<CreateResponse>(
+      await createShare(basePodcast, "198.51.100.14"),
+    );
+    const nearlyExpired = Math.floor(Date.now() / 1000) + 60;
+    await env.DB.prepare("UPDATE share_links SET expires_at = ? WHERE id = ?")
+      .bind(nearlyExpired, first.id)
+      .run();
+
+    const renewed = await json<CreateResponse>(
+      await createShare(basePodcast, "198.51.100.14"),
+    );
+    expect(renewed.id).toBe(first.id);
+    expect(renewed.expiresAt).toBeGreaterThan(nearlyExpired);
+
+    await env.DB.prepare("UPDATE share_links SET expires_at = ? WHERE id = ?")
+      .bind(Math.floor(Date.now() / 1000) - 1, first.id)
+      .run();
+
+    const expiredResponse = await workerFetch(`/p/${first.id}`, {
+      headers: { Accept: "application/json" },
+    });
+    expect(expiredResponse.status).toBe(404);
+
+    const replacement = await json<CreateResponse>(
+      await createShare(basePodcast, "198.51.100.14"),
+    );
+    expect(replacement.id).not.toBe(first.id);
+    expect(await shareCount()).toBe(1);
+  });
+
+  it("coalesces concurrent creation requests into one stable link", async () => {
+    const responses = await Promise.all(
+      Array.from({ length: 8 }, (_, index) =>
+        createShare(baseEpisode, `198.51.100.${40 + index}`),
+      ),
+    );
+    const bodies = await Promise.all(
+      responses.map((response) => json<CreateResponse>(response)),
+    );
+
+    expect(responses.every((response) => response.status === 200 || response.status === 201)).toBe(true);
+    expect(new Set(bodies.map((body) => body.id))).toHaveLength(1);
+    expect(await shareCount()).toBe(1);
   });
 
   it("rejects private, malformed, oversized, and mixed-kind metadata", async () => {
@@ -278,6 +333,39 @@ describe("associated domains", () => {
     expect(detail?.appIDs).toEqual(["N886FR56SY.com.simonzryd.jollypod-app"]);
     expect(detail?.components.map((component) => component["/"]))
       .toEqual(["/e/*", "/p/*"]);
+  });
+});
+
+describe("share retention", () => {
+  it("deletes expired records during the daily scheduled cleanup", async () => {
+    const expired = await json<CreateResponse>(
+      await createShare(baseEpisode, "198.51.100.30"),
+    );
+    const active = await json<CreateResponse>(
+      await createShare(
+        { ...baseEpisode, guid: "active-guid" },
+        "198.51.100.31",
+      ),
+    );
+    const scheduledTime = Date.now();
+    await env.DB.prepare("UPDATE share_links SET expires_at = ? WHERE id = ?")
+      .bind(Math.floor(scheduledTime / 1000) - 1, expired.id)
+      .run();
+
+    const controller = createScheduledController({
+      cron: "23 3 * * *",
+      scheduledTime: new Date(scheduledTime),
+    });
+    const context = createExecutionContext();
+    await worker.scheduled(controller, env, context);
+    await waitOnExecutionContext(context);
+
+    expect(await shareCount()).toBe(1);
+    expect(
+      await env.DB.prepare("SELECT id FROM share_links WHERE id = ?")
+        .bind(active.id)
+        .first<{ id: string }>(),
+    ).toEqual({ id: active.id });
   });
 });
 

@@ -1,6 +1,8 @@
 const CANONICAL_ORIGIN = "https://jollypod.app";
 const MAXIMUM_REQUEST_BYTES = 16 * 1024;
 const MAXIMUM_START_TIME_SECONDS = 30 * 24 * 60 * 60;
+const SHARE_RETENTION_SECONDS = 30 * 24 * 60 * 60;
+const MAXIMUM_PUBLIC_CACHE_SECONDS = 5 * 60;
 const SHORT_ID_PATTERN = /^[A-Za-z0-9_-]{8,32}$/u;
 const PUBLIC_ROUTE_PATTERN = /^\/(e|p)\/([A-Za-z0-9_-]{8,32})$/u;
 const TESTFLIGHT_URL = "https://testflight.apple.com/join/Uh3skMhD";
@@ -36,6 +38,7 @@ interface ShareRow {
   episode_webpage_url: string | null;
   published_at: number | null;
   duration_seconds: number | null;
+  expires_at: number;
 }
 
 interface ShareRecord {
@@ -99,7 +102,8 @@ const SELECT_COLUMNS = `
   episode_title,
   episode_webpage_url,
   published_at,
-  duration_seconds
+  duration_seconds,
+  expires_at
 `;
 
 const INSERT_SHARE = `
@@ -116,8 +120,9 @@ const INSERT_SHARE = `
     episode_title,
     episode_webpage_url,
     published_at,
-    duration_seconds
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    duration_seconds,
+    expires_at
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
 const DEFAULT_LOCALE: LocaleCode = "en";
@@ -272,7 +277,8 @@ export default {
         return errorResponse(request, error.status, error.code, error.message);
       }
 
-      console.error("share_worker_request_failed", {
+      console.error({
+        event: "share_worker_request_failed",
         path: url.pathname,
         error: error instanceof Error ? error.name : "UnknownError",
       });
@@ -283,6 +289,16 @@ export default {
         "This JollyPod link is temporarily unavailable.",
       );
     }
+  },
+
+  async scheduled(controller, env, _ctx): Promise<void> {
+    const nowSeconds = Math.floor(controller.scheduledTime / 1000);
+    const result = await deleteExpiredShares(env.DB, nowSeconds);
+    console.log({
+      event: "share_retention_cleanup",
+      deletedRecords: result.meta.changes,
+      scheduledTime: controller.scheduledTime,
+    });
   },
 } satisfies ExportedHandler<Env>;
 
@@ -317,10 +333,22 @@ async function handleCreate(request: Request, url: URL, env: Env): Promise<Respo
 
   const input = validateShareInput(await readBoundedJSON(request));
   const identityKey = await makeIdentityKey(input);
-  const existing = await findByIdentity(env.DB, identityKey);
+  const nowSeconds = currentUnixTimeSeconds();
+  const expiresAt = nowSeconds + SHARE_RETENTION_SECONDS;
+  const existing = await findByIdentity(env.DB, identityKey, nowSeconds);
   if (existing !== null) {
+    await env.DB.prepare("UPDATE share_links SET expires_at = MAX(expires_at, ?) WHERE id = ?")
+      .bind(expiresAt, existing.id)
+      .run();
+    existing.expires_at = Math.max(existing.expires_at, expiresAt);
     return createResponse(request, existing, 200);
   }
+
+  await env.DB.prepare(
+    "DELETE FROM share_links WHERE identity_key = ? AND expires_at <= ?",
+  )
+    .bind(identityKey, nowSeconds)
+    .run();
 
   for (let attempt = 0; attempt < 6; attempt += 1) {
     const shortID = generateShortID();
@@ -339,11 +367,18 @@ async function handleCreate(request: Request, url: URL, env: Env): Promise<Respo
         input.episodeWebpageURL,
         input.publishedAt,
         input.durationSeconds,
+        expiresAt,
       )
       .run();
 
-    const inserted = await findByIdentity(env.DB, identityKey);
+    const inserted = await findByIdentity(env.DB, identityKey, nowSeconds);
     if (inserted !== null) {
+      if (inserted.expires_at < expiresAt) {
+        await env.DB.prepare("UPDATE share_links SET expires_at = MAX(expires_at, ?) WHERE id = ?")
+          .bind(expiresAt, inserted.id)
+          .run();
+        inserted.expires_at = expiresAt;
+      }
       return createResponse(request, inserted, inserted.id === shortID ? 201 : 200);
     }
   }
@@ -361,21 +396,23 @@ async function handleResolve(request: Request, url: URL, env: Env): Promise<Resp
     return notFoundResponse(request);
   }
 
+  const nowSeconds = currentUnixTimeSeconds();
   const row = await env.DB.prepare(
-    `SELECT ${SELECT_COLUMNS} FROM share_links WHERE id = ? AND kind = ? LIMIT 1`,
+    `SELECT ${SELECT_COLUMNS} FROM share_links WHERE id = ? AND kind = ? AND expires_at > ? LIMIT 1`,
   )
-    .bind(route.shortID, route.kind)
+    .bind(route.shortID, route.kind, nowSeconds)
     .first<ShareRow>();
   if (row === null) {
     return notFoundResponse(request);
   }
 
   const record = rowToRecord(row);
+  const cacheSeconds = publicCacheSeconds(row.expires_at, nowSeconds);
   if (wantsJSON(request)) {
     return dynamicResponse(request, JSON.stringify(record), {
       status: 200,
       headers: {
-        "Cache-Control": "public, max-age=300, s-maxage=86400, immutable",
+        "Cache-Control": `public, max-age=${cacheSeconds}, s-maxage=${cacheSeconds}, must-revalidate`,
         "Content-Type": "application/json; charset=utf-8",
         Vary: "Accept",
       },
@@ -385,18 +422,36 @@ async function handleResolve(request: Request, url: URL, env: Env): Promise<Resp
   return dynamicResponse(request, renderSharePage(record, route, request.headers.get("accept-language")), {
     status: 200,
     headers: {
-      "Cache-Control": "public, max-age=300, s-maxage=86400, immutable",
+      "Cache-Control": `public, max-age=${cacheSeconds}, s-maxage=${cacheSeconds}, must-revalidate`,
       "Content-Type": "text/html; charset=utf-8",
       Vary: "Accept, Accept-Language",
     },
   });
 }
 
-async function findByIdentity(db: D1Database, identityKey: string): Promise<ShareRow | null> {
+async function findByIdentity(
+  db: D1Database,
+  identityKey: string,
+  nowSeconds: number,
+): Promise<ShareRow | null> {
   return db
-    .prepare(`SELECT ${SELECT_COLUMNS} FROM share_links WHERE identity_key = ? LIMIT 1`)
-    .bind(identityKey)
+    .prepare(`SELECT ${SELECT_COLUMNS} FROM share_links WHERE identity_key = ? AND expires_at > ? LIMIT 1`)
+    .bind(identityKey, nowSeconds)
     .first<ShareRow>();
+}
+
+function deleteExpiredShares(db: D1Database, nowSeconds: number): Promise<D1Result> {
+  return db.prepare("DELETE FROM share_links WHERE expires_at <= ?")
+    .bind(nowSeconds)
+    .run();
+}
+
+function currentUnixTimeSeconds(): number {
+  return Math.floor(Date.now() / 1000);
+}
+
+function publicCacheSeconds(expiresAt: number, nowSeconds: number): number {
+  return Math.max(0, Math.min(MAXIMUM_PUBLIC_CACHE_SECONDS, expiresAt - nowSeconds));
 }
 
 function createResponse(request: Request, row: ShareRow, status: 200 | 201): Response {
@@ -404,7 +459,7 @@ function createResponse(request: Request, row: ShareRow, status: 200 | 201): Res
   const url = `${CANONICAL_ORIGIN}/${path}/${row.id}`;
   return dynamicResponse(
     request,
-    JSON.stringify({ version: 1, id: row.id, kind: row.kind, url }),
+    JSON.stringify({ version: 1, id: row.id, kind: row.kind, url, expiresAt: row.expires_at }),
     {
       status,
       headers: {

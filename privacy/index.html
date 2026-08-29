@@ -28,7 +28,7 @@
         <span class="eyebrow">Privacy policy</span>
         <h1>No ads. No profiles.<br><span class="gradient-text">No mystery analytics.</span></h1>
         <p class="lede">JollyPod has no advertising or analytics backend. JollyPod does not receive your podcast library, queue, searches, listening history, playback progress, or imported audio unless you deliberately create a public share link or include something in a support message. The app still connects to Apple and podcast providers for the features you request, as explained below.</p>
-        <span class="legal-meta">Last updated: 22 August 2026</span>
+        <span class="legal-meta">Last updated: 28 August 2026</span>
       </section>
 
       <section class="section-tight shell legal">
@@ -94,7 +94,7 @@
             <h2>6. Website, shared links, and Cloudflare</h2>
             <p>The website and public share links are hosted with Cloudflare Workers and D1. JollyPod does not add analytics, advertising trackers, social-media trackers, or non-essential cookies. The site’s security policy also blocks third-party analytics scripts.</p>
             <p>When you choose to create a share link, the app sends the minimum identity and display metadata needed for that link. Depending on the item, this can include the feed address, episode GUID or enclosure address, podcast and episode titles, author, public webpage addresses, publication date, and duration. A shared playback position appears only in the link itself. The service does not receive playback state, queue state, subscription state, or your wider library, and it does not fetch the submitted feeds, webpages, or media.</p>
-            <p>Anyone who has a share link can view its stored display metadata. Link records are immutable so that the same podcast or episode can keep the same short address. Cloudflare’s rate limiter can process an IP address to prevent automated abuse, but JollyPod does not store that IP address in the share-link database.</p>
+            <p>Anyone who has a share link can view its stored display metadata until the link expires. Link metadata is immutable, while another deliberate creation request for the same podcast or episode renews the existing short address for a further 30 days. Cloudflare’s rate limiter can process an IP address to prevent automated abuse, but JollyPod does not store that IP address in the share-link database.</p>
             <p>Cloudflare processes technical request and network data needed to deliver and protect the site. This can include an IP address, timestamp, requested page, referrer, browser or operating-system information, routing data, and security events. Cloudflare may use strictly necessary security cookies when a protection feature requires them. JollyPod does not use those cookies or request data for advertising, profiling, or audience analytics and does not maintain a separate visitor database.</p>
             <p>Cloudflare’s processing and retention are described in the <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare Privacy Policy</a>.</p>
           </section>
@@ -133,7 +133,7 @@
               <li><strong>Subscription records</strong> are retained by Apple under its rules. JollyPod keeps only the limited local entitlement state needed to provide access.</li>
               <li><strong>Routine support correspondence</strong> is normally deleted within 12 months after the request is resolved. Important security, dispute, accounting, or legal records may be kept longer where necessary.</li>
               <li><strong>Hosting and third-party request logs</strong> follow the retention periods of Cloudflare, Apple, and the relevant podcast provider.</li>
-              <li><strong>Public share-link metadata</strong> remains while the stable link service is operated or until the link is removed for a valid support, security, or legal reason. You can send the complete link to <a href="mailto:hello@jollypod.app">hello@jollypod.app</a> to request review or deletion.</li>
+              <li><strong>Public share-link metadata</strong> is retained for 30 days after the most recent deliberate creation request. It becomes unavailable when that period ends and is deleted automatically by a daily cleanup. You can send the complete link to <a href="mailto:hello@jollypod.app">hello@jollypod.app</a> to request earlier review or deletion.</li>
             </ul>
             <p>JollyPod uses reasonable technical and organisational safeguards, including a restrictive website content-security policy and Apple’s platform security. No system can guarantee absolute security.</p>
           </section>

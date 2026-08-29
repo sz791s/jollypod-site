@@ -2,6 +2,7 @@ import { cloudflareTest, readD1Migrations } from "@cloudflare/vitest-plugin";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+  cacheDir: ".vite-cache",
   plugins: [
     cloudflareTest(async () => ({
       wrangler: {
