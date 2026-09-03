@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("/assets/fonts/instrument-sans.woff2") format("woff2");
+}
+
 :root {
   --pink: #ec4890;
   --pink-dark: #c72f73;
@@ -28,7 +37,7 @@ body {
     radial-gradient(circle at 8% 4%, rgba(236, 72, 144, 0.10), transparent 28rem),
     radial-gradient(circle at 92% 16%, rgba(251, 191, 20, 0.13), transparent 26rem),
     var(--paper);
-  font-family: ui-rounded, "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Instrument Sans", ui-rounded, "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 17px;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
@@ -135,6 +144,9 @@ p {
 h1,
 h2,
 h3 {
+  font-stretch: 94%;
+  font-feature-settings: "ss01" 1, "ss02" 1, "ss03" 1;
+  font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.035em;
 }
@@ -179,7 +191,9 @@ h3 {
   gap: 0.72rem;
   color: var(--ink);
   font-size: 1.08rem;
-  font-weight: 800;
+  font-feature-settings: "ss01" 1, "ss02" 1, "ss03" 1;
+  font-stretch: 94%;
+  font-weight: 700;
   letter-spacing: -0.02em;
   text-decoration: none;
 }
